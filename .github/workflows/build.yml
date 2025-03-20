@@ -24,8 +24,6 @@ jobs:
           - name: linux-arm64
             arch_image: arm64
             host: arm64-server
-    env:
-      FREE_DESKTOP_GIT_URL: "https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/lib/"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
