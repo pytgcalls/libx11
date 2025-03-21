@@ -109,7 +109,7 @@ while IFS='=' read -r lib version; do
     git clone 'https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/lib/lib'${lib}'.git' --branch 'lib'${lib}'-'$version --depth 1
     cd 'lib'${lib}
     echo 'Running autogen.sh for lib'${lib}'...'
-    ./autogen.sh --enable-static --prefix=/app/lib${lib}/build;
+    ./autogen.sh --enable-static --disable-shared --prefix=/app/lib${lib}/build;
     if [ $? -ne 0 ]; then
       echo 'Error while executing autogen.sh for lib'${lib} >&2
       exit 1
