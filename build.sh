@@ -10,12 +10,13 @@ get_version() {
 UTIL_MACROS_VERSION=$(get_version "util-macros")
 XTRANS_VERSION=$(get_version "Xtrans")
 XI_VERSION=$(get_version "Xi")
+XORGPROTO_VERSION=$(get_version "xorgproto")
 
 # Install util-macros
 git clone https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/util/macros.git --branch util-macros-$UTIL_MACROS_VERSION --depth 1
 cd macros
 echo 'Running autogen.sh for macros...'
-./autogen.sh --prefix=/usr;
+./autogen.sh --enable-static --disable-shared --with-pic --prefix=/usr;
 if [ $? -ne 0 ]; then
   echo 'Error while executing autogen.sh for macros' >&2
   exit 1
@@ -36,7 +37,7 @@ cd ..
 git clone https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/lib/libxtrans.git --branch xtrans-$XTRANS_VERSION --depth 1
 cd libxtrans
 echo 'Running autogen.sh for libxtrans...'
-./autogen.sh --prefix=/usr;
+./autogen.sh --enable-static --disable-shared --with-pic --prefix=/usr;
 if [ $? -ne 0 ]; then
   echo 'Error while executing autogen.sh for libxtrans' >&2
   exit 1
@@ -54,10 +55,10 @@ fi
 cd ..
 
 # Install xorgproto
-git clone https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/proto/xorgproto.git --branch xorgproto-2024.1 --depth 1
+git clone https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/proto/xorgproto.git --branch xorgproto-$XORGPROTO_VERSION --depth 1
 cd xorgproto
 echo 'Running autogen.sh for xorgproto...'
-./autogen.sh --prefix=/usr;
+./autogen.sh --enable-static --disable-shared --with-pic --prefix=/usr;
 if [ $? -ne 0 ]; then
   echo 'Error while executing autogen.sh for xorgproto' >&2
   exit 1
@@ -78,7 +79,7 @@ cd ..
 git clone https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/lib/libXi.git --branch libXi-$XI_VERSION --depth 1
 cd libXi
 echo 'Running autogen.sh for libXi...'
-./autogen.sh --prefix=/usr;
+./autogen.sh --enable-static --disable-shared --with-pic --prefix=/usr;
 if [ $? -ne 0 ]; then
   echo 'Error while executing autogen.sh for libXi' >&2
   exit 1
@@ -109,7 +110,7 @@ while IFS='=' read -r lib version; do
     git clone 'https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/lib/lib'${lib}'.git' --branch 'lib'${lib}'-'$version --depth 1
     cd 'lib'${lib}
     echo 'Running autogen.sh for lib'${lib}'...'
-    ./autogen.sh --enable-static --disable-shared --prefix=/app/lib${lib}/build;
+    ./autogen.sh --enable-static --disable-shared --with-pic --prefix=/app/lib${lib}/build;
     if [ $? -ne 0 ]; then
       echo 'Error while executing autogen.sh for lib'${lib} >&2
       exit 1
