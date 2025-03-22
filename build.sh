@@ -11,6 +11,7 @@ UTIL_MACROS_VERSION=$(get_version "util-macros")
 XTRANS_VERSION=$(get_version "Xtrans")
 XI_VERSION=$(get_version "Xi")
 XORGPROTO_VERSION=$(get_version "xorgproto")
+XCBPROTO_VERSION=$(get_version "xcb")
 
 # Install util-macros
 git clone https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/util/macros.git --branch util-macros-$UTIL_MACROS_VERSION --depth 1
@@ -71,6 +72,27 @@ fi
 make install
 if [ $? -ne 0 ]; then
   echo 'Error while executing make install for xorgproto' >&2
+  exit 1
+fi
+cd ..
+
+# Install xcb-proto
+git clone https://gitlab.com/freedesktop-sdk/mirrors/freedesktop/xorg/proto/xcbproto.git --branch xcb-proto-$XCBPROTO_VERSION --depth 1
+cd xcbproto
+echo 'Running autogen.sh for xcb-proto...'
+./autogen.sh --enable-static --disable-shared --with-pic --prefix=/usr;
+if [ $? -ne 0 ]; then
+  echo 'Error while executing autogen.sh for xcb-proto' >&2
+  exit 1
+fi
+make -j$(nproc)
+if [ $? -ne 0 ]; then
+  echo 'Error while executing make for xcb-proto' >&2
+  exit 1
+fi
+make install
+if [ $? -ne 0 ]; then
+  echo 'Error while executing make install for xcb-proto' >&2
   exit 1
 fi
 cd ..
