@@ -1,34 +1,31 @@
-# shellcheck disable=SC1090
-source <(curl -s https://raw.githubusercontent.com/pytgcalls/build-toolkit/refs/heads/master/build-toolkit.sh)
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/pytgcalls/build-toolkit/refs/heads/master/build-toolkit.sh)"
 
-UTIL_MACROS_VERSION=$(get_version "util-macros")
-XTRANS_VERSION=$(get_version "Xtrans")
-XI_VERSION=$(get_version "Xi")
-XORGPROTO_VERSION=$(get_version "xorgproto")
-XCBPROTO_VERSION=$(get_version "xcb")
+import libraries.properties
 
-build_and_install "${FREEDESKTOP_GIT}xorg/util/macros.git" "util-macros-$UTIL_MACROS_VERSION" autogen
-build_and_install "${FREEDESKTOP_GIT}xorg/lib/libxtrans.git" "xtrans-$XTRANS_VERSION" autogen
-build_and_install "${FREEDESKTOP_GIT}xorg/proto/xorgproto.git" "xorgproto-$XORGPROTO_VERSION" autogen
-build_and_install "${FREEDESKTOP_GIT}xorg/proto/xcbproto.git" "xcb-proto-$XCBPROTO_VERSION" autogen
-build_and_install "${FREEDESKTOP_GIT}xorg/lib/libXi.git" "libXi-$XI_VERSION" autogen-static --prefix=/usr
+build_and_install "macros" configure
+build_and_install "libXtrans" configure
+build_and_install "xorgproto" configure
+build_and_install "libXfixes" configure-static
+build_and_install "libXi" configure-static
+build_and_install "xcbproto" configure
 
-run mkdir -p artifacts/lib
-run mkdir -p artifacts/include
+build_and_install "libXau" configure-static
+build_and_install "libXcb" configure-static
+build_and_install "libX11" configure-static
+build_and_install "libXcomposite" configure-static
+build_and_install "libXdamage" configure-static
+build_and_install "libXext" configure-static
+build_and_install "libXrender" configure-static
+build_and_install "libXrandr" configure-static
+build_and_install "libXtst" configure-static
 
-while IFS='=' read -r lib version; do
-  echo "Processing lib${lib}..."
-  if [[ -n "$lib" && ! "$lib" =~ ^# ]]; then
-    if [[ "$lib" == "Xi" || "$lib" == "Xtrans" || "$lib" == "xorgproto" || "$lib" == "util-macros" ]]; then
-      continue
-    fi
-    echo "Cloning lib${lib}..."
-    build_and_install "${FREEDESKTOP_GIT}xorg/lib/lib${lib}.git" "lib${lib}-$version" autogen-static --prefix="$(pwd)/lib${lib}/build"
-    echo "Copying lib${lib} to artifacts/lib..."
-    run cp -r lib"${lib}"/build/lib/*.a artifacts/lib/
-    for dir in "lib${lib}"/build/include/*/; do
-      run cp -r "$dir" artifacts/include/
-    done
-  fi
-done < "$LIBRARIES_FILE"
-echo "All libraries successfully built"
+copy_libs "libXau" "artifacts"
+copy_libs "libXcb" "artifacts"
+copy_libs "libX11" "artifacts"
+copy_libs "libXcomposite" "artifacts"
+copy_libs "libXdamage" "artifacts"
+copy_libs "libXext" "artifacts"
+copy_libs "libXfixes" "artifacts"
+copy_libs "libXrender" "artifacts"
+copy_libs "libXrandr" "artifacts"
+copy_libs "libXtst" "artifacts"
