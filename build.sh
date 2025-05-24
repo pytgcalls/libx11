@@ -29,3 +29,4 @@ copy_libs "libXfixes" "artifacts"
 copy_libs "libXrender" "artifacts"
 copy_libs "libXrandr" "artifacts"
 copy_libs "libXtst" "artifacts"
+copy_libs "xorgproto" "artifacts" --only-headers
