@@ -47,7 +47,7 @@ jobs:
         run: tar -czvf libX11.${{ matrix.platform.name }}.tar.gz artifacts
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: libX11.${{ matrix.platform.name }}.tar.gz
           path: libX11.${{ matrix.platform.name }}.tar.gz
