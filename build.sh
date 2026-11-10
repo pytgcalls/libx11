@@ -10,7 +10,7 @@ build_and_install "libXi" configure-static
 build_and_install "xcbproto" configure
 
 build_and_install "libXau" configure-static
-build_and_install "libXcb" configure-static
+build_and_install "libXcb" configure-static ac_cv_lib_Xdmcp_XdmcpWrap=no
 build_and_install "libX11" configure-static
 build_and_install "libXcomposite" configure-static
 build_and_install "libXdamage" configure-static
